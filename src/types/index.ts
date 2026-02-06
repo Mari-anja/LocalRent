@@ -50,9 +50,11 @@ export interface RentalListing {
   description?: string;
   listingType: ListingType;
 
-  /** Monthly rent */
+  /** Monthly rent in local currency */
   price: number;
   currency: Currency;
+  /** Price normalized to USD by the Edge Function */
+  priceUsd?: number;
 
   /** Size in square meters */
   areaSqm?: number;
