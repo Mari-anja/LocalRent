@@ -1,19 +1,9 @@
-// ─── Geographic Models ───────────────────────────────────────────────────────
+// ─── Shared Enums / Unions ───────────────────────────────────────────────────
 
-export interface Country {
-  id: string;
-  name: string;
-  code: string; // ISO 3166-1 alpha-2 (e.g. "HR", "PT", "ES")
-}
-
-export interface City {
-  id: string;
-  name: string;
-  countryId: string;
-  /** Optional lat/lng for map features later */
-  latitude?: number;
-  longitude?: number;
-}
+export type Currency = "EUR" | "USD" | "GBP" | "HRK";
+export type LanguageCode = "it" | "fr" | "es" | "de" | "pt" | "en" | "hr";
+export type ListingType = "apartment" | "house" | "room" | "studio";
+export type ScrapeStatus = "pending" | "running" | "completed" | "failed";
 
 // ─── Rental Site Models ──────────────────────────────────────────────────────
 
@@ -26,10 +16,30 @@ export interface RentalSite {
   logoUrl?: string;
 }
 
-// ─── Listing Models ──────────────────────────────────────────────────────────
+// ─── Geographic Models ───────────────────────────────────────────────────────
 
-export type ListingType = "apartment" | "house" | "room" | "studio";
-export type Currency = "EUR" | "USD" | "GBP" | "HRK";
+export interface Country {
+  id: string;
+  name: string;
+  code: string; // ISO 3166-1 alpha-2 (e.g. "HR", "PT", "ES")
+  flag: string; // Emoji flag
+  language: LanguageCode; // Primary language (ISO 639-1)
+  currency: Currency;
+  currencySymbol: string;
+  usdRate: number; // Approximate 1 unit → USD
+  sites: RentalSite[];
+}
+
+export interface City {
+  id: string;
+  name: string;
+  countryId: string;
+  /** Optional lat/lng for map features later */
+  latitude?: number;
+  longitude?: number;
+}
+
+// ─── Listing Models ──────────────────────────────────────────────────────────
 
 export interface RentalListing {
   id: string;
@@ -87,8 +97,6 @@ export interface SearchFilters {
 
 // ─── Scrape Request / Response ───────────────────────────────────────────────
 // These model the contract with Supabase Edge Functions.
-
-export type ScrapeStatus = "pending" | "running" | "completed" | "failed";
 
 export interface ScrapeRequest {
   id: string;
